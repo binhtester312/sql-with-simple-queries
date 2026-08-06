@@ -1,0 +1,78 @@
+version: "3.8"
+
+services:
+
+  # ─────────────────────────────────────────────
+  # 1. SQL Server (Express – miễn phí, đủ dùng)
+  # ─────────────────────────────────────────────
+  nopcommerce_db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: nop_sqlserver
+    platform: linux/amd64          # compat với Apple Silicon qua Rosetta
+    restart: unless-stopped
+    environment:
+      SA_PASSWORD: "Test@123456!"
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: "Express"
+    ports:
+      - "1433:1433"                 # JDBC: jdbc:sqlserver://localhost:1433
+    volumes:
+      - ./volumes/mssql_data:/var/opt/mssql
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'Test@123456!' -Q 'SELECT 1' || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+      start_period: 60s
+
+  # ─────────────────────────────────────────────
+  # 2. nopCommerce Web Application
+  # ─────────────────────────────────────────────
+  nopcommerce_web:
+    image: nopcommerceteam/nopcommerce:latest
+    container_name: nop_web
+    restart: unless-stopped
+    ports:
+      - "8080:80"                   # Truy cập: http://localhost:8080
+    depends_on:
+      nopcommerce_db:
+        condition: service_healthy
+    volumes:
+      - ./volumes/nopcommerce_data:/app/App_Data
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+
+  # ─────────────────────────────────────────────
+  # 3. Selenium Hub (điều phối test)
+  # ─────────────────────────────────────────────
+  selenium_hub:
+    image: selenium/hub:4.21.0-20240518
+    container_name: nop_selenium_hub
+    restart: unless-stopped
+    ports:
+      - "4444:4444"                 # RemoteWebDriver: http://localhost:4444/wd/hub
+      - "4442:4442"
+      - "4443:4443"
+
+  # ─────────────────────────────────────────────
+  # 4. Chrome Node (chạy browser thật trong Docker)
+  # ─────────────────────────────────────────────
+  chrome_node:
+    image: selenium/node-chrome:4.21.0-20240518
+    container_name: nop_chrome
+    restart: unless-stopped
+    shm_size: "2gb"                 # Tránh Chrome crash do thiếu RAM
+    depends_on:
+      - selenium_hub
+    environment:
+      - SE_EVENT_BUS_HOST=selenium_hub
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+      - SE_NODE_MAX_SESSIONS=3
+      - SE_NODE_OVERRIDE_MAX_SESSIONS=true
+    volumes:
+      - /dev/shm:/dev/shm
+
+networks:
+  default:
+    name: nopcommerce_network

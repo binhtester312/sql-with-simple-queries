@@ -1,15 +1,12 @@
 package com.nopcommerce.config;
 
 /**
- * NopCommerceConfig.java
- * ─────────────────────────────────────────────────────────
  * Cấu hình kết nối cho automation testing với nopCommerce local
- * Dùng trong cả selenium-java-framework và hybrid-framework
- * ─────────────────────────────────────────────────────────
  */
+
 public class NopCommerceConfig {
 
-    // ── Web Application ──────────────────────────────────
+    // ── Web App──────────────────────────────────
     /** URL của nopCommerce chạy local qua Docker */
     public static final String BASE_URL = "http://nop_web";
 

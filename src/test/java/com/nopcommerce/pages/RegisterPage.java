@@ -52,7 +52,7 @@ public class RegisterPage extends BasePage {
         clickRegisterButton();
     }
 
-    public String getRegistrationSuccessMessage() {
+    public String getRegisSuccessMess() {
         return getText(SUCCESS_MESSAGE);
     }
 }

@@ -48,14 +48,14 @@ At `http://localhost:8080`, fill in:
 
 | Field | Value |
 |---|---|
-| Admin email | `admin@yourstore.com` |
-| Admin password | `admin` |
+| Admin email | `<your-admin-email>` |
+| Admin password | `<your-admin-password>` |
 | Database type | `SQL Server` |
 | Server name | `nop_sqlserver,1433` |
 | Database name | `NopCommerceDB` |
 | Auth type | SQL Authentication |
-| Username | `sa` |
-| Password | `Test@123456!` |
+| Username | `<your-db-username>` |
+| Password | `<your-db-password>` |
 
 Wait ~2–3 min for schema creation (120+ tables).
 
@@ -65,9 +65,9 @@ Wait ~2–3 min for schema creation (120+ tables).
 
 | Service | URL | Credentials |
 |---|---|---|
-| nopCommerce | http://localhost:8080 | admin@yourstore.com / admin |
+| nopCommerce | http://localhost:8080 | `<your-admin-email>` / `<your-admin-password>` |
 | Selenium Grid UI | http://localhost:4444 | — |
-| SQL Server (JDBC) | localhost:1433 | sa / Test@123456! |
+| SQL Server (JDBC) | localhost:1433 | `<your-db-username>` / `<your-db-password>` |
 
 ---
 

@@ -9,7 +9,7 @@ ACTION=${1:-"start"}
 case $ACTION in
     start)
         echo "🚀 Starting nopCommerce local environment..."
-        docker-compose up -d
+        docker compose up -d
         echo ""
         echo "⏳ Waiting for services to be ready..."
         sleep 20
@@ -25,7 +25,7 @@ case $ACTION in
 
     stop)
         echo "🛑 Stopping nopCommerce local environment..."
-        docker-compose stop
+        docker compose stop
         echo "✅ Stopped (data preserved)"
         ;;
 
@@ -33,7 +33,7 @@ case $ACTION in
         echo "⚠️  RESET: This will delete ALL data!"
         read -p "Are you sure? (y/N): " confirm
         if [[ $confirm == "y" || $confirm == "Y" ]]; then
-            docker-compose down -v
+            docker compose down -v
             rm -rf volumes/nopcommerce_data/*
             rm -rf volumes/mssql_data/*
             echo "✅ Reset complete. Run './manage.sh start' to begin fresh."
@@ -44,7 +44,7 @@ case $ACTION in
 
     status)
         echo "📊 Container Status:"
-        docker-compose ps
+        docker compose ps
         echo ""
         echo "📊 Health Check:"
         docker inspect nop_sqlserver --format='SQL Server: {{.State.Health.Status}}' 2>/dev/null || echo "SQL Server: Not running"
@@ -52,7 +52,7 @@ case $ACTION in
 
     logs)
         SERVICE=${2:-""}
-        docker-compose logs -f $SERVICE
+        docker compose logs -f $SERVICE
         ;;
 
     *)

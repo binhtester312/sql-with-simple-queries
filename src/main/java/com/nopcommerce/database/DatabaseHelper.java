@@ -1,22 +1,14 @@
+package com.nopcommerce.database;
+
+import com.nopcommerce.config.NopCommerceConfig;
+import java.sql.*;
+
 /**
  * DatabaseHelper.java
  * ─────────────────────────────────────────────────────────
  * Helper class để verify database sau khi automation test chạy
- * Thêm vào selenium-java-framework hoặc hybrid-framework
- * ─────────────────────────────────────────────────────────
- * Dependency cần thêm vào pom.xml:
- *
- *   <dependency>
- *       <groupId>com.microsoft.sqlserver</groupId>
- *       <artifactId>mssql-jdbc</artifactId>
- *       <version>12.6.0.jre11</version>
- *       <scope>test</scope>
- *   </dependency>
  * ─────────────────────────────────────────────────────────
  */
-
-import java.sql.*;
-
 public class DatabaseHelper {
 
     private static Connection connection;
@@ -45,8 +37,9 @@ public class DatabaseHelper {
         String sql = "SELECT COUNT(*) FROM Customer WHERE Email = ? AND Deleted = 0";
         try (PreparedStatement ps = getConnection().prepareStatement(sql)) {
             ps.setString(1, email);
-            ResultSet rs = ps.executeQuery();
-            return rs.next() && rs.getInt(1) > 0;
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next() && rs.getInt(1) > 0;
+            }
         }
     }
 
@@ -61,13 +54,14 @@ public class DatabaseHelper {
                      "WHERE c.Email = ?";
         try (PreparedStatement ps = getConnection().prepareStatement(sql)) {
             ps.setString(1, email);
-            ResultSet rs = ps.executeQuery();
-            return rs.next() ? rs.getInt(1) : 0;
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next() ? rs.getInt(1) : 0;
+            }
         }
     }
 
     /**
-     * Xóa test data sau khi test xong (dùng trong @AfterClass)
+     * Xóa test data sau khi test xong (dùng trong @AfterClass hoặc @AfterMethod)
      * @param email email của test user cần cleanup
      */
     public static void cleanupTestCustomer(String email) throws SQLException {
@@ -88,7 +82,7 @@ public class DatabaseHelper {
     }
 
     /**
-     * Đóng kết nối (dùng trong @AfterSuite)
+     * Đóng kết nối
      */
     public static void closeConnection() throws SQLException {
         if (connection != null && !connection.isClosed()) {

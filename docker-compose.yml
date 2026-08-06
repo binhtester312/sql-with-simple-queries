@@ -1,4 +1,3 @@
-version: "3.8"
 
 services:
 
@@ -8,22 +7,22 @@ services:
   nopcommerce_db:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: nop_sqlserver
-    platform: linux/amd64          # compat với Apple Silicon qua Rosetta
+    platform: linux/amd64
     restart: unless-stopped
     environment:
       SA_PASSWORD: "Test@123456!"
       ACCEPT_EULA: "Y"
       MSSQL_PID: "Express"
     ports:
-      - "1433:1433"                 # JDBC: jdbc:sqlserver://localhost:1433
+      - "1433:1433"
     volumes:
-      - ./volumes/mssql_data:/var/opt/mssql
+      - mssql_data:/var/opt/mssql          # named volume – Docker tự quản lý
     healthcheck:
-      test: ["CMD-SHELL", "/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'Test@123456!' -Q 'SELECT 1' || exit 1"]
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P 'Test@123456!' -Q 'SELECT 1' -No || exit 1"]
       interval: 15s
       timeout: 10s
       retries: 10
-      start_period: 60s
+      start_period: 90s
 
   # ─────────────────────────────────────────────
   # 2. nopCommerce Web Application
@@ -31,47 +30,37 @@ services:
   nopcommerce_web:
     image: nopcommerceteam/nopcommerce:latest
     container_name: nop_web
+    platform: linux/amd64
     restart: unless-stopped
     ports:
-      - "8080:80"                   # Truy cập: http://localhost:8080
+      - "8080:80"
     depends_on:
       nopcommerce_db:
         condition: service_healthy
     volumes:
-      - ./volumes/nopcommerce_data:/app/App_Data
+      - nop_appdata:/app/App_Data          # named volume – giữ nguyên file trong container
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
 
   # ─────────────────────────────────────────────
-  # 3. Selenium Hub (điều phối test)
+  # 3. Selenium Grid standalone Chrome (arm64)
   # ─────────────────────────────────────────────
-  selenium_hub:
-    image: selenium/hub:4.21.0-20240518
-    container_name: nop_selenium_hub
+  selenium_chrome:
+    image: seleniarm/standalone-chromium:latest
+    container_name: nop_selenium_chrome
     restart: unless-stopped
+    shm_size: "2gb"
     ports:
-      - "4444:4444"                 # RemoteWebDriver: http://localhost:4444/wd/hub
-      - "4442:4442"
-      - "4443:4443"
-
-  # ─────────────────────────────────────────────
-  # 4. Chrome Node (chạy browser thật trong Docker)
-  # ─────────────────────────────────────────────
-  chrome_node:
-    image: selenium/node-chrome:4.21.0-20240518
-    container_name: nop_chrome
-    restart: unless-stopped
-    shm_size: "2gb"                 # Tránh Chrome crash do thiếu RAM
-    depends_on:
-      - selenium_hub
+      - "4444:4444"
+      - "7900:7900"                         # noVNC: xem browser live
     environment:
-      - SE_EVENT_BUS_HOST=selenium_hub
-      - SE_EVENT_BUS_PUBLISH_PORT=4442
-      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
       - SE_NODE_MAX_SESSIONS=3
-      - SE_NODE_OVERRIDE_MAX_SESSIONS=true
-    volumes:
-      - /dev/shm:/dev/shm
+      - SE_VNC_NO_PASSWORD=1
+
+# ── Named volumes (Docker tự tạo và quản lý) ──
+volumes:
+  mssql_data:
+  nop_appdata:
 
 networks:
   default:

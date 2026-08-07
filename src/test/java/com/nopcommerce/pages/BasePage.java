@@ -65,7 +65,11 @@ public class BasePage {
     }
 
     protected boolean isDisplayed(By locator) {
-        return wait.until(ExpectedConditions.visibilityOfElementLocated(locator)).isDisplayed();
+        try {
+            return !driver.findElements(locator).isEmpty() && driver.findElement(locator).isDisplayed();
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     protected boolean isDisplayed(String locator) {

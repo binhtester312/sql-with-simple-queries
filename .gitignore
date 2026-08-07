@@ -2,3 +2,5 @@ volumes/
 target/
 .idea/
 *.class
+allure-report/
+allure-results/

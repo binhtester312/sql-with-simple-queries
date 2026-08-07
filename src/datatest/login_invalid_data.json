@@ -1,0 +1,32 @@
+[
+    {
+        "description": "Email trống - hiện lỗi inline ngay dưới field email",
+        "email": "",
+        "password": "Test@123456!",
+        "expectedErrorMessage": "Please enter your email"
+    },
+    {
+        "description": "Email sai định dạng - hiện lỗi inline ngay dưới field email",
+        "email": "invalid-email-format",
+        "password": "Test@123456!",
+        "expectedErrorMessage": "Please enter a valid email address."
+    },
+    {
+        "description": "Email chưa đăng ký - hiện lỗi trên đầu trang",
+        "email": "notfound9999@gmail.com",
+        "password": "Test@123456!",
+        "expectedErrorMessage": "No customer account found"
+    },
+    {
+        "description": "Password trống (email hợp lệ) - hiện lỗi trên đầu trang",
+        "email": "admin@yourstore.com",
+        "password": "",
+        "expectedErrorMessage": "The credentials provided are incorrect"
+    },
+    {
+        "description": "Password sai (email hợp lệ) - hiện lỗi trên đầu trang",
+        "email": "admin@yourstore.com",
+        "password": "WrongPassword999!",
+        "expectedErrorMessage": "The credentials provided are incorrect"
+    }
+]

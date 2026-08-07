@@ -65,9 +65,7 @@ public class BaseTest {
 
             // 1. Tạo thư mục báo cáo HTML tĩnh (allure-report)
             new ProcessBuilder("allure", "generate", resultsPath, "-o", reportPath, "--clean").start().waitFor();
-
-            // 2. Mở báo cáo trên trình duyệt thông qua web server nội bộ của Allure (tránh lỗi CORS)
-            new ProcessBuilder("allure", "open", reportPath).start();
+            System.out.println("✅ Đã tạo xong Allure Report tĩnh tại: file://" + indexPath);
         } catch (Exception e) {
             System.err.println("❌ Lỗi khi tự động mở Allure Report: " + e.getMessage());
         }

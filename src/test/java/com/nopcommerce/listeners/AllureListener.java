@@ -9,7 +9,37 @@ import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
 
+import java.io.File;
+
 public class AllureListener implements ITestListener {
+
+    private static boolean isCleaned = false;
+
+    @Override
+    public void onStart(ITestContext context) {
+        deletePreviousAllureResults();
+    }
+
+    private synchronized void deletePreviousAllureResults() {
+        if (!isCleaned) {
+            cleanDirectory(new File("target/allure-results"));
+            cleanDirectory(new File("allure-results"));
+            isCleaned = true;
+        }
+    }
+
+    private void cleanDirectory(File dir) {
+        if (dir.exists() && dir.isDirectory()) {
+            File[] files = dir.listFiles();
+            if (files != null) {
+                for (File file : files) {
+                    if (file.isFile()) {
+                        file.delete();
+                    }
+                }
+            }
+        }
+    }
 
     @Attachment(value = "Screenshot - {0}", type = "image/png")
     public byte[] saveScreenshot(String name, WebDriver driver) {

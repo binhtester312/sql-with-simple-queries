@@ -38,4 +38,9 @@ public class LoginData {
     public void setExpectedErrorMessage(String expectedErrorMessage) {
         this.expectedErrorMessage = expectedErrorMessage;
     }
+
+    @Override
+    public String toString() {
+        return description != null ? description : super.toString();
+    }
 }

@@ -32,6 +32,6 @@ public class RegisterTest_JavaFaker extends BaseTest {
         Assert.assertEquals(registerPage.getRegisSuccessMess(), "Your registration completed");
 
         // Database verification
-        // Assert.assertTrue(DatabaseHelper.isCustomerExist(email));
+        Assert.assertTrue(DatabaseHelper.isCustomerExist(email));
     }
 }

@@ -104,6 +104,7 @@ driver.get("http://localhost:8080");
 ./manage.sh start    # Start all containers
 ./manage.sh stop     # Stop (data preserved)
 ./manage.sh status   # Check container status
+./manage.sh seed     # 🌱 Seed sample test data for DB testing
 ./manage.sh reset    # ⚠️ Wipe all data, fresh start
 ./manage.sh logs     # Tail all logs
 ```
@@ -115,11 +116,15 @@ driver.get("http://localhost:8080");
 ```
 nopcommerce-local/
 ├── docker-compose.yml        # 4-service orchestration
-├── manage.sh                 # Start/stop/reset helper
+├── manage.sh                 # Start/stop/reset/seed helper
 ├── NopCommerceConfig.java    # URLs & credentials constants
 ├── DatabaseHelper.java       # JDBC helper for DB verification
 ├── init-scripts/
-│   └── init-db.sql           # Sample SQL queries for test validation
+│   ├── init-db.sql           # Sample SQL queries for test validation
+│   └── seed-test-data.sql    # Seed script for test data
+├── src/docs/
+│   ├── sql_db_testing_guide.md  # Hướng dẫn thực hành SQL DB Testing cho Fresher
+│   └── guide_json_jackson_pojo.md # Hướng dẫn Jackson/POJO
 └── volumes/                  # Persistent data (gitignored)
 ```
 

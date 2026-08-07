@@ -50,12 +50,19 @@ case $ACTION in
         docker inspect nop_sqlserver --format='SQL Server: {{.State.Health.Status}}' 2>/dev/null || echo "SQL Server: Not running"
         ;;
 
+    seed)
+        echo "🌱 Seeding test data into SQL Server (NopCommerceDB)..."
+        docker exec -i nop_sqlserver /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P 'Test@123456!' -C < init-scripts/seed-test-data.sql
+        echo "✅ Seed data complete!"
+        ;;
+
     logs)
         SERVICE=${2:-""}
         docker compose logs -f $SERVICE
         ;;
 
     *)
-        echo "Usage: ./manage.sh [start|stop|reset|status|logs]"
+        echo "Usage: ./manage.sh [start|stop|reset|seed|status|logs]"
         ;;
 esac
+

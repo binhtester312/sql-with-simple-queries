@@ -38,7 +38,14 @@
             <artifactId>mssql-jdbc</artifactId>
             <version>${mssql-jdbc.version}</version>
         </dependency>
+        <!-- DataFaker - Thư viện sinh dữ liệu ngẫu nhiên -->
+        <dependency>
+            <groupId>net.datafaker</groupId>
+            <artifactId>datafaker</artifactId>
+            <version>2.2.2</version>
+        </dependency>
     </dependencies>
+
 
     <build>
         <plugins>

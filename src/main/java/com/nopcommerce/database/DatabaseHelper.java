@@ -3,9 +3,7 @@ package com.nopcommerce.database;
 import com.nopcommerce.config.NopCommerceConfig;
 import java.sql.*;
 
-/**
- * Helper class để verify database sau khi automation test chạy
- */
+//Helper class để verify database sau khi automation test chạy
 
 public class DatabaseHelper {
 
@@ -24,7 +22,7 @@ public class DatabaseHelper {
     }
 
     /**
-     * Kiểm tra customer đã tồn tại trong DB sau khi Register
+     * Ktra customer đã tồn tại trong DB sau khi Register
      * 
      * @param email email của customer vừa đăng ký
      * @return true nếu tồn tại
@@ -78,9 +76,7 @@ public class DatabaseHelper {
         }
     }
 
-    /**
-     * Đóng kết nối
-     */
+    // Đóng kết nối
     public static void closeConnection() throws SQLException {
         if (connection != null && !connection.isClosed()) {
             connection.close();

@@ -3,7 +3,8 @@
 <suite name="NopCommerce Suite">
     <test name="Registration and Database Validation Test">
         <classes>
-            <class name="com.nopcommerce.tests.RegisterTest" />
+            <class name="com.nopcommerce.tests.RegisterTest_JavaFaker" />
+            <class name="com.nopcommerce.tests.RegisterTest_CurrentTimeMillis" />
         </classes>
     </test>
 </suite>

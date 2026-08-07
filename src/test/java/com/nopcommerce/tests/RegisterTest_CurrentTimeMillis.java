@@ -9,7 +9,7 @@ import org.testng.annotations.Test;
 
 import java.sql.SQLException;
 
-public class RegisterTest extends BaseTest {
+public class RegisterTest_CurrentTimeMillis extends BaseTest {
     private String email;
 
     @Test

@@ -4,3 +4,4 @@ target/
 *.class
 allure-report/
 allure-results/
+src/log/

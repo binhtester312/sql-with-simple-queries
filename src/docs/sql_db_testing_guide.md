@@ -258,10 +258,6 @@ WHERE Deleted = 1;
 - **Yêu cầu:** Liệt kê Tên Danh Mục (`Category.Name`) và Số Lượng Sản Phẩm thuộc danh mục đó (`COUNT(pcm.ProductId)`).
 - **Gõ câu lệnh SQL của bạn bên dưới:**
 
-```sql
--- [GÕ QUERY CỦA BẠN TẠI ĐÂY]
-
-```
 
 <details>
 <summary>💡 Gợi ý / Đáp án mẫu (Nhấn vào để mở)</summary>

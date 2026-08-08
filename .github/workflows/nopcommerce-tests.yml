@@ -106,12 +106,15 @@ jobs:
       - name: Setup Chrome browser
         uses: browser-actions/setup-chrome@v1
 
-      # FIX: Tang tu 60s len 120s
       - name: Wait for services to be ready
         run: |
-          echo "Doi SQL Server va nopCommerce khoi dong (120 giay)..."
-          sleep 120
-          echo "Services da san sang!"
+          echo "Doi SQL Server va nopCommerce khoi dong..."
+          sleep 30
+
+      - name: Auto-install nopCommerce
+        run: |
+          chmod +x init-scripts/auto_install_nopcommerce.py
+          python3 init-scripts/auto_install_nopcommerce.py http://localhost:8080 localhost,1433
 
       - name: Run LoginTest
         env:
@@ -190,8 +193,13 @@ jobs:
 
       - name: Wait for services to be ready
         run: |
-          echo "Doi SQL Server va nopCommerce khoi dong (120 giay)..."
-          sleep 120
+          echo "Doi SQL Server va nopCommerce khoi dong..."
+          sleep 30
+
+      - name: Auto-install nopCommerce
+        run: |
+          chmod +x init-scripts/auto_install_nopcommerce.py
+          python3 init-scripts/auto_install_nopcommerce.py http://localhost:8080 localhost,1433
 
       - name: Run RegisterTest_JavaFaker
         env:
@@ -267,8 +275,13 @@ jobs:
 
       - name: Wait for services to be ready
         run: |
-          echo "Doi SQL Server va nopCommerce khoi dong (120 giay)..."
-          sleep 120
+          echo "Doi SQL Server va nopCommerce khoi dong..."
+          sleep 30
+
+      - name: Auto-install nopCommerce
+        run: |
+          chmod +x init-scripts/auto_install_nopcommerce.py
+          python3 init-scripts/auto_install_nopcommerce.py http://localhost:8080 localhost,1433
 
       - name: Run RegisterTest_CurrentTimeMillis
         env:
@@ -341,6 +354,8 @@ jobs:
 
       - name: Setup GitHub Pages
         uses: actions/configure-pages@v4
+        with:
+          enablement: true
 
       - name: Upload to GitHub Pages
         uses: actions/upload-pages-artifact@v3

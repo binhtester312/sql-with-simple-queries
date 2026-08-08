@@ -69,6 +69,9 @@ public class BaseTest {
     }
 
     public static void autoOpenAllureReport() {
+        if (System.getenv("CI") != null || System.getenv("GITHUB_ACTIONS") != null) {
+            return;
+        }
         try {
             File resultsDir = new File("target/allure-results");
             if (!resultsDir.exists()) {

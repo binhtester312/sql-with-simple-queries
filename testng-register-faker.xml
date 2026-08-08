@@ -4,7 +4,7 @@
   testng-register-faker.xml
   Suite riêng cho RegisterTest_JavaFaker — dùng bởi CI/CD job: test-register-faker
 -->
-<suite name="Register Faker Suite" parallel="methods" thread-count="3">
+<suite name="Register Faker Suite">
     <listeners>
         <listener class-name="com.nopcommerce.listeners.AllureListener" />
     </listeners>

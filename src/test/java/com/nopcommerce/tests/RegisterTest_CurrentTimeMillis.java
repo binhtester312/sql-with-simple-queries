@@ -1,10 +1,10 @@
 package com.nopcommerce.tests;
 
+import com.nopcommerce.config.NopCommerceConfig;
 import com.nopcommerce.database.DatabaseHelper;
 import com.nopcommerce.pages.HomePage;
 import com.nopcommerce.pages.RegisterPage;
 import org.testng.Assert;
-import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 
 import java.sql.SQLException;
@@ -14,6 +14,7 @@ public class RegisterTest_CurrentTimeMillis extends BaseTest {
 
     @Test
     public void testUserRegistrationAndDatabaseVerification() throws SQLException {
+        driver.get(NopCommerceConfig.BASE_URL);
         // Generate random email
         email = "testuser_" + System.currentTimeMillis() + "@example.com";
         String firstName = "John";

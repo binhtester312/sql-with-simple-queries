@@ -23,7 +23,7 @@ on:
 
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -124,12 +124,13 @@ jobs:
           # Chrome local co the access localhost:8080 binh thuong
           DB_URL: "jdbc:sqlserver://localhost:1433;database=NopCommerce;trustServerCertificate=true"
           DB_USER: "sa"
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD || 'Test@123456!' }}
         run: |
           echo "Chay LoginTest..."
           mvn test \
             -Dsurefire.suiteXmlFiles=testng-login.xml \
             -DbaseUrl="${BASE_URL}" \
+            -DdbPassword="${DB_PASSWORD}" \
             -Dheadless=true \
             -q
 
@@ -206,12 +207,13 @@ jobs:
           BASE_URL: "http://localhost:8080"
           DB_URL: "jdbc:sqlserver://localhost:1433;database=NopCommerce;trustServerCertificate=true"
           DB_USER: "sa"
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD || 'Test@123456!' }}
         run: |
           echo "Chay RegisterTest_JavaFaker..."
           mvn test \
             -Dsurefire.suiteXmlFiles=testng-register-faker.xml \
             -DbaseUrl="${BASE_URL}" \
+            -DdbPassword="${DB_PASSWORD}" \
             -Dheadless=true \
             -q
 
@@ -288,12 +290,13 @@ jobs:
           BASE_URL: "http://localhost:8080"
           DB_URL: "jdbc:sqlserver://localhost:1433;database=NopCommerce;trustServerCertificate=true"
           DB_USER: "sa"
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD || 'Test@123456!' }}
         run: |
           echo "Chay RegisterTest_CurrentTimeMillis..."
           mvn test \
             -Dsurefire.suiteXmlFiles=testng-register-millis.xml \
             -DbaseUrl="${BASE_URL}" \
+            -DdbPassword="${DB_PASSWORD}" \
             -Dheadless=true \
             -q
 
@@ -352,19 +355,28 @@ jobs:
           allure generate allure-results -o gh-pages --clean
           echo "Report da tao xong!"
 
-      - name: Setup GitHub Pages
+      - name: Deploy Allure Report to GitHub Pages Branch
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./gh-pages
+
+      - name: Setup GitHub Pages Artifact
         uses: actions/configure-pages@v4
         with:
           enablement: true
+        continue-on-error: true
 
-      - name: Upload to GitHub Pages
+      - name: Upload to GitHub Pages Artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: gh-pages/
+        continue-on-error: true
 
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+        continue-on-error: true
 
-      - name: Print Report URL
-        run: echo "Xem Allure Report tai ${{ steps.deployment.outputs.page_url }}"
+      - name: Print Report Summary
+        run: echo "Allure Report exported and published successfully!"

@@ -6,7 +6,7 @@
   parallel="methods" → mỗi @Test case chạy trên 1 thread riêng
   thread-count="3"   → chạy tối đa 3 test case CÙNG LÚC
 -->
-<suite name="Login Suite" parallel="methods" thread-count="3">
+<suite name="Login Suite">
     <listeners>
         <listener class-name="com.nopcommerce.listeners.AllureListener" />
     </listeners>

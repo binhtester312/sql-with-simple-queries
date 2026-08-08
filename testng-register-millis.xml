@@ -4,7 +4,7 @@
   testng-register-millis.xml
   Suite riêng cho RegisterTest_CurrentTimeMillis — dùng bởi CI/CD job: test-register-millis
 -->
-<suite name="Register Millis Suite" parallel="methods" thread-count="3">
+<suite name="Register Millis Suite">
     <listeners>
         <listener class-name="com.nopcommerce.listeners.AllureListener" />
     </listeners>

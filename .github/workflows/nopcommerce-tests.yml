@@ -15,6 +15,12 @@ on:
   pull_request:
     branches: [ main ]
   workflow_dispatch:
+  # Chạy tự động lúc 00:00 giờ Việt Nam (UTC+7) mỗi đêm
+  # GitHub Actions dùng UTC → 00:00 VN = 17:00 UTC ngày hôm trước
+  # Cú pháp cron: phút giờ ngày tháng thứ
+  schedule:
+    - cron: '0 17 * * *'   # 00:00 VN (UTC+7) mỗi ngày
+
 
 permissions:
   contents: read

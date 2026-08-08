@@ -1,6 +1,5 @@
 package com.nopcommerce.tests;
 
-import com.nopcommerce.config.NopCommerceConfig;
 import com.nopcommerce.database.DatabaseHelper;
 import com.nopcommerce.pages.HomePage;
 import com.nopcommerce.pages.RegisterPage;
@@ -12,10 +11,10 @@ import java.sql.SQLException;
 
 public class RegisterTest_JavaFaker extends BaseTest {
 
-    @Test(invocationCount = 2)
+    @Test(invocationCount = 20)
     public void testUserRegisWithJavaFaker() throws SQLException {
         driver.manage().deleteAllCookies();
-        driver.get(NopCommerceConfig.BASE_URL);
+        driver.get("http://localhost:8080");
 
         Faker faker = new Faker();
         String firstName = faker.name().firstName();

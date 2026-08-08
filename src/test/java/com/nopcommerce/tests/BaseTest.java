@@ -4,11 +4,13 @@ import com.nopcommerce.listeners.AllureListener;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Listeners;
 
 import java.io.File;
+import java.net.URL;
 import java.time.Duration;
 
 @Listeners(AllureListener.class)
@@ -21,20 +23,41 @@ public class BaseTest {
     }
 
     @BeforeClass
-    public void setUp() {
+    public void setUp() throws Exception {
         ChromeOptions options = new ChromeOptions();
-        if (Boolean.getBoolean("headless")) {
-            options.addArguments("--headless=new");
-        }
         options.addArguments("--no-sandbox");
         options.addArguments("--disable-dev-shm-usage");
+        options.addArguments("--disable-gpu");
+        options.addArguments("--window-size=1920,1080");
 
-        driver = new ChromeDriver(options);
+        // Đọc Selenium Grid URL từ System Property hoặc Env Var
+        // CI/CD sẽ set SELENIUM_HUB_URL, local dev để trống
+        String gridUrl = System.getProperty("gridUrl",
+            System.getenv().getOrDefault("SELENIUM_HUB_URL", ""));
+
+        if (!gridUrl.isEmpty()) {
+            // ── Chạy trên CI/CD → dùng Selenium Grid (RemoteWebDriver) ──
+            options.addArguments("--headless=new");  // CI luôn headless
+            driver = new RemoteWebDriver(new URL(gridUrl), options);
+            System.out.println("🤖 CI Mode: Kết nối Selenium Grid tại " + gridUrl);
+        } else {
+            // ── Chạy local → dùng ChromeDriver thường ──
+            if (Boolean.getBoolean("headless")) {
+                options.addArguments("--headless=new");
+            }
+            driver = new ChromeDriver(options);
+            System.out.println("💻 Local Mode: Dùng ChromeDriver");
+        }
+
         driverThreadLocal.set(driver);
-
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-        driver.get("http://localhost:8080");
+
+        // Đọc base URL từ System Property hoặc Env Var
+        // CI/CD set BASE_URL=http://nop_web:80, local dùng localhost:8080
+        String baseUrl = System.getProperty("baseUrl",
+            System.getenv().getOrDefault("BASE_URL", "http://localhost:8080"));
+        driver.get(baseUrl);
     }
 
     @AfterClass

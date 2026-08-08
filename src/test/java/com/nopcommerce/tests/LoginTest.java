@@ -20,7 +20,10 @@ public class LoginTest extends BaseTest {
      */
     @BeforeMethod
     public void navigateToLoginPage() {
-        driver.get("http://localhost:8080/login");
+        // Đọc baseUrl từ CI/CD env var, fallback về localhost khi dev local
+        String baseUrl = System.getProperty("baseUrl",
+            System.getenv().getOrDefault("BASE_URL", "http://localhost:8080"));
+        driver.get(baseUrl + "/login");
         loginPage = new LoginPage(driver);
     }
 

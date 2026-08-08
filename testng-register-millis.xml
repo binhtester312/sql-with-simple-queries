@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<!--
+  testng-register-millis.xml
+  Suite riêng cho RegisterTest_CurrentTimeMillis — dùng bởi CI/CD job: test-register-millis
+-->
+<suite name="Register Millis Suite" parallel="methods" thread-count="3">
+    <listeners>
+        <listener class-name="com.nopcommerce.listeners.AllureListener" />
+    </listeners>
+    <test name="Register CurrentTimeMillis Tests">
+        <classes>
+            <class name="com.nopcommerce.tests.RegisterTest_CurrentTimeMillis" />
+        </classes>
+    </test>
+</suite>
